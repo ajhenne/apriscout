@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Manual additions
+personal_notes/ 
+.env
+
 # C extensions
 *.so
 
@@ -37,6 +41,9 @@ venv.bak/
 
 # Pytest cache
 .pytest_cache/
+
+# Ruff cache
+.ruff_cache/
 
 # mypy
 .mypy_cache/

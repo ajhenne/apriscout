@@ -1,3 +1,11 @@
+"""Initialize the Apriscout Flask application.
+
+Sets up the application factory pattern, configures the database and login manager.
+"""
+
+import os
+
+from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
@@ -5,10 +13,13 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 login_manager = LoginManager()
 
+load_dotenv()
+
 
 def create_app(test_config=None):
+    """Create and return the Flask application object."""
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = "test-secret"
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 
     if test_config is not None:
         app.config.update(test_config)
