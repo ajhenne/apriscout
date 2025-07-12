@@ -7,6 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+flask = "^3.1.1"
+flask-login = "^0.6.3"
+flask-sqlalchemy = "^3.1.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -17,7 +20,16 @@ ruff = "^0.12.3"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-[tool.ruff]
-line-length = 100
+
+### dev config
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+exclude = ["migrations"]
+
 [tool.pytest.ini_options]
 addopts = '-ra'
