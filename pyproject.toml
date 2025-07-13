@@ -18,6 +18,7 @@ pytest = "^8.4.1"
 black = "^25.1.0"
 ruff = "^0.12.3"
 pydocstyle = "^6.3.0"
+requests = "^2.32.4"
 
 [build-system]
 requires = ["poetry-core"]
@@ -33,7 +34,7 @@ skip-string-normalization = false
 [tool.ruff]
 line-length = 88
 target-version = "py312"
-exclude = ["personal_notes"]  # Folders to exclude
+exclude = ["personal_notes", "dev_scripts"]  # Folders to exclude
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "C90", "N", "SIM", "COM"]

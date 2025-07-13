@@ -13,6 +13,12 @@
       <a href="{{ url_for('main.login') }}">Login</a>
       <a href="{{ url_for('main.register') }}">Register</a>
     {% endif %}
+
+    <form action="{{ url_for('main.search_user') }}" method="GET">
+    <input type="text" name="search_user">
+    <input type="submit" value="search">
+    
+  </form>
   </nav>
   <hr>
   {% with messages = get_flashed_messages() %}
