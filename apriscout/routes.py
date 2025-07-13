@@ -19,6 +19,9 @@ def home():
     return render_template("home.html")
 
 
+########################################################################################
+# LOGIN FUNCTIONS
+
 @main.route("/register", methods=["GET", "POST"])
 def register():
     """Register a user through a form."""
@@ -69,6 +72,9 @@ def logout():
     return redirect(url_for("main.home"))
 
 
+########################################################################################
+# APRITABLE FUNCTIONS
+
 @main.route("/<username>", methods=["GET", "POST"])
 def apritable(username):
     """Render the profile page for a given username."""
@@ -81,22 +87,39 @@ def apritable(username):
     can_edit = current_user.is_authenticated and current_user.id == user.id
 
     if request.method == "POST" and can_edit:
+        updated = False
 
-        for key, value in request.form.items():
+        for key in request.form:
+
             if key.startswith("toggle_"):
                 parts = key.split("_")
                 if len(parts) == 3:
+                    ball = parts[2]
                     user_pokemon = UserPokemon.query.get(int(parts[1]))
-                    ball_type = parts[2]
-
                     if user_pokemon and user_pokemon.user_id == user.id:
-                        setattr(user_pokemon, f"ball_{ball_type}", value=="on")
+                        current_value = getattr(user_pokemon, ball, None)
+                        new_value = True
+                        if current_value is not True:
+                            setattr(user_pokemon, ball, new_value)
+                            updated = True
 
-        db.session.commit()
-        flash("Collection update successfully.")
+        # Now handle unchecked boxes — these are not in request.form
+        for entry in UserPokemon.query.filter_by(user_id=user.id).all():
+            for ball in ('fast', 'lure', 'level', 'heavy', 'love', 'moon', 'dream', 'safari', 'beast', 'sport'):
+                field_name = f"toggle_{entry.id}_{ball}"
+                if field_name not in request.form:
+                    if getattr(entry, ball):
+                        setattr(entry, ball, False)
+                        updated = True
+
+        if updated:
+            db.session.commit()
+            flash("Collection updated successfully.")
+        else:
+            flash("No changes made.")
+
         return redirect(url_for("main.apritable", username=username))
     
-    # If GET
     user_collection = UserPokemon.query.filter_by(user_id=user.id).join(Pokemon).all()
     all_pokemon = Pokemon.query.order_by(Pokemon.dex_num).all()
 
@@ -109,6 +132,35 @@ def apritable(username):
         ball_list=apriball_names
     )
 
+
+@main.route("/<username>/add_pokemon", methods=["POST"])
+@login_required
+def add_pokemon(username):
+    """Add a Pokemon to the user's Apritable."""
+
+    user = User.query.filter(func.lower(User.username) == username.lower()).first()
+    if not user:
+        flash("User not found.")
+        return redirect(url_for("main.home"))
+    
+    if current_user.id != user.id:
+        flash("You are not authorised to edit someone else's collection.")
+
+    pokemon_id = request.form.get("pokemon_id")
+    if not pokemon_id:
+        flash("No pokemon selected.")
+        return redirect(url_for("main.apritable", username=username))
+    
+    already_exists = UserPokemon.query.filter_by(user_id=user.id, pokemon_id=pokemon_id).first()
+    if already_exists:
+        flash("That Pokemon already exists in your collection.")
+    else:
+        new_entry = UserPokemon(user_id=user.id, pokemon_id=pokemon_id)
+        db.session.add(new_entry)
+        db.session.commit()
+        flash(f"{Pokemon.query.get(pokemon_id).name} added to your collection!")
+
+    return redirect(url_for("main.apritable", username=username))
 
 
 @main.route("/search")

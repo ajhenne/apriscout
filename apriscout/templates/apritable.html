@@ -8,8 +8,9 @@
 {% block content %}
 <h2>{{ user.username }}'s Pokémon Collection</h2>
 
+<!-- IF USER IS LOGGED IN ------------------------------------------------------------->
 {% if can_edit %}
-<form method="post" action="{{ url_for('main.user_page', username=user.username) }}">
+<form method="post" action="{{ url_for('main.apritable', username=user.username) }}">
   <table border="1" cellpadding="5" cellspacing="0">
     <thead>
       <tr>
@@ -30,7 +31,7 @@
               <input
                 type="checkbox"
                 name="toggle_{{ entry.id }}_{{ ball }}"
-                {% if entry.ball %}checked{% endif %}
+                {% if attribute(entry, ball) %}checked{% endif %}
               />
             </td>
           {% endfor %}
@@ -54,6 +55,8 @@
   <button type="submit">Add</button>
 </form>
 
+<!-- IF ANONYMOUS USER ---------------------------------------------------------------->
+
 {% else %}
 <table border="1" cellpadding="5" cellspacing="0">
   <thead>
@@ -72,7 +75,7 @@
         <td>{{ entry.pokemon.name }}</td>
         {% for ball in ball_list %}
           <td>
-            <img src="/static/sprites/balls/{{ ball }}-ball.png" alt="{{ ball }}" class="{% if entry.ball %}{% else %}greyscale{% endif %}">
+            <img src="/static/sprites/balls/{{ ball }}-ball.png" alt="{{ ball }}" class="{% if attribute(entry, ball) %}{% else %}greyscale{% endif %}">
           </td>
         {% endfor %}
       </tr>
