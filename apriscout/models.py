@@ -22,7 +22,9 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128), nullable=False)
 
     collections = db.relationship(
-        "UserPokemon", back_populates="user", cascade="all, delete-orphan",
+        "UserPokemon",
+        back_populates="user",
+        cascade="all, delete-orphan",
     )
 
     def set_password(self, password):
@@ -37,7 +39,7 @@ class User(db.Model, UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     """Return the user instance."""
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 
 class Pokemon(db.Model):
@@ -48,11 +50,11 @@ class Pokemon(db.Model):
         name (str): Pokemon name.
         dexNum (int): Pokedex number.
         formId (str): Special forms, like female or gimicks.
-        smogon (str): Smogon name.
         isFemale (bool): If the Pokemon is (specifically) female.
-        hiddenAbility (bool): If the Pokemon has a hidden ability.
-        abilities (str): The Pokemon's hidden ability, or otherwise first ability.
-        sprite (str): The link to the Pokemon's sprite.
+        generation (int): The generation of introduction for the Pokemon.
+        type1 (string): Primary type of the Pokemon.
+        type2 (string): Secondary typing of the Pokemon, if applicable.
+        sprite (str): The relative link to the Pokemon's sprite.
     """
 
     id = db.Column(db.Integer, primary_key=True)
