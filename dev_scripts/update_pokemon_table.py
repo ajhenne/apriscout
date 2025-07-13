@@ -5,7 +5,7 @@ import json
 from apriscout import create_app, db
 from apriscout.models import Pokemon
 
-SPRITE_FOLDER = "apriscout/static/sprites/pokemon"
+SPRITE_FOLDER = "sprites/pokemon"
 JSON_PATH = "dev_scripts/legacy-pokemon.json"
 
 app = create_app()

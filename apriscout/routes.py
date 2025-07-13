@@ -1,16 +1,17 @@
 """Flask route handles."""
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, current_user
 from sqlalchemy import func
 
 from apriscout.utils import is_valid_username
 
 from . import db
-from .models import User
+from .models import User, Pokemon, UserPokemon
 
 main = Blueprint("main", __name__)
 
+apriball_names = ('fast', 'lure', 'level', 'heavy', 'love', 'moon', 'dream', 'safari', 'beast', 'sport')
 
 @main.route("/")
 def home():
@@ -53,7 +54,7 @@ def login():
 
         if user and user.check_password(request.form["password"]):
             login_user(user, remember=True)
-            return redirect(url_for("main.user_page", username=user.username))
+            return redirect(url_for("main.apritable", username=user.username))
 
         flash("Invalid credentials.")
 
@@ -68,15 +69,46 @@ def logout():
     return redirect(url_for("main.home"))
 
 
-@main.route("/<username>")
-def user_page(username):
+@main.route("/<username>", methods=["GET", "POST"])
+def apritable(username):
     """Render the profile page for a given username."""
     user = User.query.filter(func.lower(User.username) == username.lower()).first()
-    if user:
-        return render_template("user.html", user=user)
+    
+    if not user:
+        flash("User not found.")
+        return redirect(url_for("main.home"))
+    
+    can_edit = current_user.is_authenticated and current_user.id == user.id
 
-    flash("User not found.")
-    return redirect(url_for("main.home"))
+    if request.method == "POST" and can_edit:
+
+        for key, value in request.form.items():
+            if key.startswith("toggle_"):
+                parts = key.split("_")
+                if len(parts) == 3:
+                    user_pokemon = UserPokemon.query.get(int(parts[1]))
+                    ball_type = parts[2]
+
+                    if user_pokemon and user_pokemon.user_id == user.id:
+                        setattr(user_pokemon, f"ball_{ball_type}", value=="on")
+
+        db.session.commit()
+        flash("Collection update successfully.")
+        return redirect(url_for("main.apritable", username=username))
+    
+    # If GET
+    user_collection = UserPokemon.query.filter_by(user_id=user.id).join(Pokemon).all()
+    all_pokemon = Pokemon.query.order_by(Pokemon.dex_num).all()
+
+    return render_template(
+        "apritable.html",
+        user=user,
+        can_edit=can_edit,
+        collection=user_collection,
+        all_pokemon=all_pokemon,
+        ball_list=apriball_names
+    )
+
 
 
 @main.route("/search")
@@ -92,7 +124,7 @@ def search_user():
         func.lower(User.username) == search_user_query.lower(),
     ).first()
     if user:
-        return redirect(url_for("main.user_page", username=user.username))
+        return redirect(url_for("main.apritable", username=user.username))
 
     flash("Username not found.")
     return redirect(request.referrer or url_for("main.home"))

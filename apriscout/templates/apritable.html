@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}{{ user.username }}'s Collection{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='style/apritable.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>{{ user.username }}'s Pokémon Collection</h2>
+
+{% if can_edit %}
+<form method="post" action="{{ url_for('main.user_page', username=user.username) }}">
+  <table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Sprite</th>
+        <th>Name</th>
+        {% for ball in ball_list %}
+          <th>{{ ball.capitalize() }} Ball</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in collection %}
+        <tr>
+          <td><img src="{{ url_for('static', filename=entry.pokemon.sprite) }}" alt="{{ entry.pokemon.name }}" width="40"></td>
+          <td>{{ entry.pokemon.name }}</td>
+          {% for ball in ball_list %}
+            <td>
+              <input
+                type="checkbox"
+                name="toggle_{{ entry.id }}_{{ ball }}"
+                {% if entry.ball %}checked{% endif %}
+              />
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <button type="submit">Save Collection</button>
+</form>
+
+<!-- Add Pokemon form -->
+<form method="post" action="{{ url_for('main.add_pokemon', username=user.username) }}">
+  <label for="pokemon_id">Add Pokémon:</label>
+  <select name="pokemon_id" id="pokemon_id" required>
+    <option value="">-- Select Pokémon --</option>
+    {% for pkm in all_pokemon %}
+      <option value="{{ pkm.id }}">{{ pkm.name }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Add</button>
+</form>
+
+{% else %}
+<table border="1" cellpadding="5" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Sprite</th>
+      <th>Name</th>
+      {% for ball in ball_list %}
+        <th>{{ ball.capitalize() }} Ball</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for entry in collection %}
+      <tr>
+        <td><img src="{{ url_for('static', filename=entry.pokemon.sprite) }}" alt="{{ entry.pokemon.name }}" width="40"></td>
+        <td>{{ entry.pokemon.name }}</td>
+        {% for ball in ball_list %}
+          <td>
+            <img src="/static/sprites/balls/{{ ball }}-ball.png" alt="{{ ball }}" class="{% if entry.ball %}{% else %}greyscale{% endif %}">
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
