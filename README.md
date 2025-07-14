@@ -23,7 +23,7 @@ I am always eager to hear your ideas or suggestions to improve this application!
 ## Issues
 
 Inevitably there will be bugs, I am a learner and this is a hobby. Issues can be submitted through Github, just provide details of what you were trying to do and what went wrong so I can work to fix this.
- 
+
 
 ## Contributing
 

@@ -20,6 +20,7 @@ black = "^25.1.0"
 ruff = "^0.12.3"
 pydocstyle = "^6.3.0"
 requests = "^2.32.4"
+pre-commit = "^4.2.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -30,7 +31,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.black]
 line-length = 88
 target-version = ["py312"]
-skip-string-normalization = false 
+skip-string-normalization = false
 
 [tool.ruff]
 line-length = 88
@@ -42,6 +43,7 @@ select = ["E", "F", "I", "B", "UP", "C90", "N", "SIM", "COM"]
 
 [tool.pytest.ini_options]
 addopts = '-ra'
+filterwarnings = ["ignore:datetime\\.datetime\\.utcnow\\(\\) is deprecated:DeprecationWarning"]
 
 [tool.pydocstyle]
 convention = "google"
