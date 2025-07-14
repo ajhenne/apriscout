@@ -100,7 +100,11 @@ def apritable(username):
         return redirect(url_for("main.apritable", username=username))
 
     user_collection = UserPokemon.query.filter_by(user_id=user.id).join(Pokemon).all()
-    all_pokemon = Pokemon.query.order_by(Pokemon.dex_num).all()
+
+    all_pokemon = [
+        {"id": p.id, "name": p.name, "sprite": p.sprite}
+        for p in Pokemon.query.order_by(Pokemon.name).all()
+    ]
 
     return render_template(
         "apritable.html",
