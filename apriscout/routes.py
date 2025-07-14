@@ -41,7 +41,7 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        flash("Account created. Please login.")
+        flash("Account created. Please login.", category="success")
 
         return redirect(url_for("main.login"))
 
@@ -59,9 +59,10 @@ def login():
 
         if user and user.check_password(request.form["password"]):
             login_user(user, remember=True)
+            flash("Login successful!", category="success")
             return redirect(url_for("main.apritable", username=user.username))
 
-        flash("Invalid credentials.")
+        flash("Invalid credentials.", category="error")
 
     return render_template("login.html")
 
@@ -123,15 +124,18 @@ def add_pokemon(username):
 
     user = User.query.filter(func.lower(User.username) == username.lower()).first()
     if not user:
-        flash("User not found.")
+        flash("User not found.", category="error")
         return redirect(url_for("main.home"))
 
     if current_user.id != user.id:
-        flash("You are not authorised to edit someone else's collection.")
+        flash(
+            "You are not authorised to edit someone else's collection.",
+            category="error",
+        )
 
     pokemon_id = request.form.get("pokemon_id")
     if not pokemon_id:
-        flash("No pokemon selected.")
+        flash("Invalid Pokemon selection.", category="warning")
         return redirect(url_for("main.apritable", username=username))
 
     already_exists = UserPokemon.query.filter_by(
@@ -139,12 +143,15 @@ def add_pokemon(username):
         pokemon_id=pokemon_id,
     ).first()
     if already_exists:
-        flash("That Pokemon already exists in your collection.")
+        flash("That Pokemon already exists in your collection.", category="warning")
     else:
         new_entry = UserPokemon(user_id=user.id, pokemon_id=pokemon_id)
         db.session.add(new_entry)
         db.session.commit()
-        flash(f"{Pokemon.query.get(pokemon_id).name} added to your collection!")
+        flash(
+            f"{Pokemon.query.get(pokemon_id).name} added to your collection!",
+            category="success",
+        )
 
     return redirect(url_for("main.apritable", username=username))
 
