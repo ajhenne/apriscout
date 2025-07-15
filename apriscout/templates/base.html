@@ -8,21 +8,30 @@
 </head>
 
 <body>
-  <nav>
-    <a href="{{ url_for('main.home') }}">Home</a>
-    {% if current_user.is_authenticated %}
-    <a href="{{ url_for('main.logout') }}">Logout</a>
-    <a href="{{ url_for('main.apritable', username=current_user.username) }}">My Page</a>
-    {% else %}
-    <a href="{{ url_for('main.login') }}">Login</a>
-    <a href="{{ url_for('main.register') }}">Register</a>
-    {% endif %}
-
-    <form action="{{ url_for('main.search_user') }}" method="GET">
-      <input type="text" name="search_user">
-      <input type="submit" value="search">
-
-    </form>
+  <div class="nav-highlight nav-highlight-accent1"></div>
+  <div class="nav-highlight nav-highlight-accent2"></div>
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="{{ url_for('main.home') }}" class="nav-logo-link">
+        <img src="{{ url_for('static', filename='sprites/logo.png') }}" alt="apriscout logo" class="logo">
+      </a>
+      <a class="nav-title" href="{{ url_for('main.home') }}">
+        <span class="nav-title-primary">Apri</span><span class="nav-title-secondary">scout</span>
+      </a>
+    </div>
+    <div class="nav-right">
+      <form action="{{ url_for('main.search_user') }}" method="GET" class="search-form">
+        <input type="text" name="search_user" placeholder="Search user..." class="nav-button"/>
+        <input type="submit" value="Search" class="nav-button"/>
+      </form>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('main.apritable', username=current_user.username) }}" class="nav-button">Apritable</a>
+        <a href="{{ url_for('main.logout') }}" class="nav-button">Logout</a>
+      {% else %}
+        <a href="{{ url_for('main.login') }}" class="nav-button">Login</a>
+        <a href="{{ url_for('main.register') }}" class="nav-button">Register</a>
+      {% endif %}
+    </div>
   </nav>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
@@ -35,8 +44,10 @@
     {% endif %}
   {% endwith %}
 
+  <div class="content-wrapper">
+    {% block content %}{% endblock %}
+  </div>
 
-  {% block content %}{% endblock %}
   <script>
     // setTimeout(() => {
     //   document.querySelectorAll(".flash-message").forEach(el => el.style.display = "none");

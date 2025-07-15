@@ -5,6 +5,7 @@ __pycache__/
 
 # Manual additions
 personal_notes/
+design/
 .env
 
 # C extensions
