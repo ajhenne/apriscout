@@ -8,8 +8,6 @@
 </head>
 
 <body>
-  <div class="nav-highlight nav-highlight-accent1"></div>
-  <div class="nav-highlight nav-highlight-accent2"></div>
   <nav class="navbar">
     <div class="nav-left">
       <a href="{{ url_for('main.home') }}" class="nav-logo-link">
@@ -25,11 +23,11 @@
         <input type="submit" value="Search" class="nav-button"/>
       </form>
       {% if current_user.is_authenticated %}
-        <a href="{{ url_for('main.apritable', username=current_user.username) }}" class="nav-button">Apritable</a>
-        <a href="{{ url_for('main.logout') }}" class="nav-button">Logout</a>
+      <a href="{{ url_for('main.apritable', username=current_user.username) }}" class="nav-button">Apritable</a>
+      <a href="{{ url_for('main.logout') }}" class="nav-button">Logout</a>
       {% else %}
-        <a href="{{ url_for('main.login') }}" class="nav-button">Login</a>
-        <a href="{{ url_for('main.register') }}" class="nav-button">Register</a>
+      <a href="{{ url_for('main.login') }}" class="nav-button">Login</a>
+      <a href="{{ url_for('main.register') }}" class="nav-button">Register</a>
       {% endif %}
     </div>
   </nav>
@@ -49,9 +47,6 @@
   </div>
 
   <script>
-    // setTimeout(() => {
-    //   document.querySelectorAll(".flash-message").forEach(el => el.style.display = "none");
-    // }, 3000);
     setTimeout(() => {
       document.querySelectorAll(".flash-message").forEach(el => {
         el.classList.add("fade-out");

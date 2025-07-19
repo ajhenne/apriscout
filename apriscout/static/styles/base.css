@@ -1,65 +1,42 @@
 :root{
   --accent1: #5CC5CE;
   --accent2: #F9A529;
-  --darkbase: #282827;
-  --midbase: #504f4f;
-  --lightbase: #cccccc;
+  --darkbase: #16394d;
+  --midbase: #416a81;
+  --lightbase: #f0fbff;
   --lightaccent1: #baf3ff;
   --lightaccent2: #feb673;
-  --textdark: #171716;
+  --blockdark: #171716;
   --light: #FFFFFF;
 }
 
 * {
     font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
 }
 
 body {
     font-family: 'Montserrat', sans-serif;
-    background-color: var(--darkbase);
+    background-color: var(--midbase);
+    margin: 0;
 }
 
-
-.nav-highlight-accent1 {
-  background-color: var(--midbase);
-  height: 10px;
-  top: 30px;
-  border-top: 3px solid var(--accent2);
+.content-wrapper {
+  margin-top: 2rem;
 }
 
-.nav-highlight-accent2 {
-  background-color: var(--midbase);
-  height: 10px;
-  top: 40px;
-  border-bottom: 3px solid var(--accent1);
-}
-
-.nav-highlight {
-  position: fixed;
-  width: 100%;
-  /* height: 1px; */
-  max-width: 100%;
-  left: 0;
-}
+/* NAVBAR ELEMENTS ================================================================== */
 
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  height: 50px;
-  max-width: 90%;
-  background-color: var(--midbase);
-  padding: 0px 20px;
-  margin-top: 15px;
-  border-radius: 10px;
-  z-index: 999;
+  width: 100%;
+  height: 65px;
+  background-color: var(--darkbase);
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 3px solid var(--accent2);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  border: 3px solid var(--lightbase);
 }
 
 .nav-left {
@@ -69,26 +46,41 @@ body {
 }
 
 .logo {
-  height: 70px;
-  padding-top: 5px;
+  height: 55px;
+  margin-left: 10px;
+  /* margin-top: 70px; */
   width: auto;
 }
 
 .nav-title {
   font-weight: 1000;
-  font-size: 2.5rem;
+  text-shadow: 1px 1px 2px var(--blockdark);
   text-decoration: none;
-  padding-left: 10px;
+  padding-left: 5px;
+}
+
+.nav-title span {
+  font-size: 2.2rem;
+}
+
+@media (max-width: 768px) {
+  .nav-title {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-title {
+    font-size: 1.5rem;
+  }
 }
 
 .nav-title-primary {
   color: var(--accent2);
-  text-shadow: 1px 1px 0.5px var(--darkbase);
 }
 
 .nav-title-secondary {
   color: var(--accent1);
-  text-shadow: 1px 1px 0.5px var(--darkbase);
 }
 
 .nav-right {
@@ -100,24 +92,18 @@ body {
   text-decoration: none;
   align-items: center;
   display: flex;
-  color: var(--textdark);
+  color: var(--light);
   font-weight: 100;
   justify-content: center;
   align-items: center;
-  background-color: var(--lightaccent1);
   height: 30px;
-  border: none;
-  border-radius: 5px;
-  border-right: 2px solid var(--darkbase);
-  border-left: 2px solid var(--darkbase);
+  border-left: 1px solid var(--accent1);
   width: 120px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  margin: 10px 0px;
-  margin-left: 10px;
+  padding: 5px 0;
 }
 
 .nav-button:hover {
-  background-color: var(--accent1);
+  color: var(--accent1);
 }
 
 .search-form {
@@ -125,24 +111,36 @@ body {
 }
 
 .search-form input[type="text"] {
-  background-color: white;
+  background-color: var(--midbase);
+  color: var(--light);
+  /* height: auto; */
+  border: none;
   width: 300px;
+  border-top-left-radius: 7px;
+  border-bottom-left-radius: 7px;
   padding-left: 10px;
-  padding-top: 0px;
-  padding-bottom: 0px;
+}
+
+.search-form input[type="text"]::placeholder {
+  color: var(--light); /* or any color you prefer */
+  opacity: 0.7; /* optional */
 }
 
 .search-form input[type="submit"] {
-  background-color: var(--lightaccent2);
+  background-color: var(--darkbase);
+  border: none;
+  height: auto;
+  border-left: 1px solid var(--accent2);
   padding-top: 0px;
   padding-bottom: 0px;
 }
 
 .search-form input[type="submit"]:hover{
-  background-color: var(--accent2);
+  color: var(--accent2);
   cursor: pointer;
 }
 
+/* FLASHBAR ELEMENTS ================================================================ */
 
 .flash-container {
   position: fixed;
