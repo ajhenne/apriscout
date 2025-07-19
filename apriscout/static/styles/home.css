@@ -1,0 +1,12 @@
+.page-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--accent2); /* Apriball orange */
+  margin-bottom: 20px;
+}
