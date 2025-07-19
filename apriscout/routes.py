@@ -17,7 +17,12 @@ main = Blueprint("main", __name__)
 @main.route("/")
 def home():
     """Render the homepage."""
-    return render_template("home.html")
+
+    sprite_list = [
+        p.sprite for p in Pokemon.query.order_by(func.random()).limit(100).all()
+    ]
+
+    return render_template("home.html", sprite_list=sprite_list)
 
 
 ########################################################################################
@@ -100,19 +105,31 @@ def apritable(username):
             flash("No changes made.")
         return redirect(url_for("main.apritable", username=username))
 
-    user_collection = UserPokemon.query.filter_by(user_id=user.id).join(Pokemon).all()
-
     all_pokemon = [
         {"id": p.id, "name": p.name, "sprite": p.sprite}
         for p in Pokemon.query.order_by(Pokemon.name).all()
     ]
 
+    user_collection = UserPokemon.query.filter_by(user_id=user.id).join(Pokemon).all()
+    unique_combinations = sum(
+        sum(1 for ball in apriball_names if getattr(entry, ball))
+        for entry in user_collection
+    )
+    completed_pokemon = sum(
+        all(getattr(entry, ball) for ball in apriball_names)
+        for entry in user_collection
+    )
+    total_progress = round(unique_combinations / (len(all_pokemon) * 9) * 100, 1)
+
     return render_template(
         "apritable.html",
         user=user,
         can_edit=can_edit,
-        collection=user_collection,
         all_pokemon=all_pokemon,
+        collection=user_collection,
+        unique_combinations=unique_combinations,
+        completed_pokemon=completed_pokemon,
+        total_progress=total_progress,
         ball_list=apriball_names,
     )
 
