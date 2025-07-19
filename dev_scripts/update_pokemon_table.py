@@ -2,9 +2,12 @@
 
 import os
 import json
+import glob
+import pandas as pd
+
 from apriscout import create_app, db
 from apriscout.models import Pokemon
-import glob
+from apriscout.constants import starter_names
 
 SPRITE_FOLDER = "sprites/pokemon"
 JSON_PATH = "dev_scripts/legacy-pokemon.json"
@@ -12,51 +15,23 @@ JSON_PATH = "dev_scripts/legacy-pokemon.json"
 app = create_app()
 
 
-def get_missing_sprites():
-    """Find missing Pokemon sprites by cycling through images."""
-
-    filepath = "/Users/ah724/Documents/apriscout/apriscout/static/sprites/pokemon/"
-
-    no_sprite = []
-    for i in range(1, 1533):
-        if not os.path.isfile(filepath + str(i) + ".png"):
-            no_sprite.append(i)
-
-    return no_sprite
-
-
-def get_problem_sprites():
-    """Just a list of problematic Pokemon/sprites."""
-
-    return [x for x in range(1528, 1551)] + [1600]
-
-
 with app.app_context():
 
     # Clear the table if needed
     db.session.query(Pokemon).delete()
 
-    with open(JSON_PATH, "r") as f:
-        data = json.load(f)
+    data = pd.read_csv("dev_scripts/pokemon_species.csv")
 
-    missing_sprites = get_missing_sprites()
-    problem_sprites = get_problem_sprites()
+    for idx, row in data.iterrows():
 
-    for id, entry in enumerate(data):
-
-        id += 1
-
-        if id in missing_sprites or id in problem_sprites:
-            continue
-
-        name = entry["name"]
-        dex_num = entry["dexNum"]
-        form_id = entry["formId"]
-        is_female = entry["isFemaleForm"]
-        generation = entry["generation"]
-        type1 = entry["type1"]
-        type2 = entry["type2"]
-        sprite = f"{SPRITE_FOLDER}/{id}.png"
+        id = idx + 1
+        name = row["identifier"]
+        generation = row["generation_id"]
+        evolves_from = row["evolves_from_species_id"]
+        evolution_chain_id = row["evolution_chain_id"]
+        female_difference = row["has_gender_differences"]
+        is_starter = name.lower() in starter_names
+        sprite = f"sprites/pokemon/{id}.png"
 
         if Pokemon.query.filter_by(name=name).first():
             continue
@@ -64,11 +39,11 @@ with app.app_context():
         pokemon = Pokemon(
             id=id,
             name=name,
-            dex_num=dex_num,
-            form_id=form_id,
-            is_female=is_female,
             generation=generation,
-            type1=type1,
+            evolves_from=evolves_from,
+            evolution_chain_id=evolution_chain_id,
+            female_difference=female_difference,
+            is_starter=is_starter,
             sprite=sprite,
         )
 
