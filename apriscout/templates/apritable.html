@@ -50,7 +50,7 @@
       <button class="category-button" data-category="{{ category }}">{{ category }}</button>
       {% endfor %}
       {% if can_edit %}
-        <button class="category-button new-category" data-category="new-category">+</button>
+        <button>+</button>
       {% endif %}
       <!-- Custom buttons will be dynamically added here -->
     </div>
@@ -75,7 +75,7 @@
 {% if can_edit %}
 
 <div class="content-container">
-  <form method="post" action="{{ url_for('main.apritable', username=user.username) }}">
+  <form method="post" action="{{ url_for('apri.apritable', username=user.username) }}">
     <table border="1" cellpadding="5" cellspacing="0">
       <thead>
         <tr>
@@ -109,7 +109,7 @@
   </form>
 
   <div id="pokemon-data" data-pokemon='{{ all_pokemon | tojson | safe }}'></div>
-  <form method="post" action="{{ url_for('main.add_pokemon', username=user.username) }}">
+  <form method="post" action="{{ url_for('apri.add_pokemon', username=user.username) }}">
     <label for="pokemon_search">Add Pokémon:</label>
     <input type="text" id="pokemon_search" name="pokemon_name" placeholder="Search Pokémon..." autocomplete="off" required>
     <input type="hidden" name="pokemon_id" id="pokemon_id">

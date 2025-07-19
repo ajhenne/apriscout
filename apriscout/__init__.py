@@ -34,8 +34,10 @@ def create_app(test_config=None):
     _ = Migrate(app, db)
 
     from .routes import main
+    from .routes_apritable import bp as apritable_bp
 
     app.register_blueprint(main)
+    app.register_blueprint(apritable_bp)
 
     app.jinja_env.globals["attribute"] = getattr
 
