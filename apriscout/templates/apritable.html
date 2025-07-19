@@ -10,6 +10,65 @@
 
 {% block content %}
 
+<div class="content-box">
+  <div class="content-header">{{ user.username }}'s Apriball Collection</div>
+
+  <div class="content-body">
+    <div class="collection-stats">
+      <div class="stat-block" title="Total unique ball-Pokémon combinations collected">
+        <img src="{{ url_for('static', filename='sprites/balls/moon.png') }}" alt="Unique" class="stat-icon">
+        <div class="stat-text-group">
+          <div class="stat-value">{{ unique_combinations }}</div>
+          <div class="stat-label">Unique Combinations</div>
+        </div>
+      </div>
+      <div class="stat-block" title="Total number of Pokémon entries marked complete">
+        <img src="{{ url_for('static', filename='sprites/pokemon/52.png') }}" alt="Completed" class="stat-icon" id="stat-pokemon-icon">
+        <div class="stat-text-group">
+          <div class="stat-value">{{ completed_pokemon }}</div>
+          <div class="stat-label">Completed Pokemon</div>
+        </div>
+      </div>
+      <div class="stat-block" title="Overall progress across all possible combinations">
+        <img src="{{ url_for('static', filename='sprites/balls/moon.png') }}" alt="Percentage" class="stat-icon">
+        <div class="stat-text-group">
+          <div class="stat-value">{{ total_progress }}%</div>
+          <div class="stat-label">Total Progress</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content-box">
+  <div class="content-header">Collection Categories</div>
+  <div class="content-body">
+    <!-- <h3 class="category-header">Custom Boxes</h3> -->
+    <div class="category-group custom-categories">
+      <button class="category-button" data-category="all">Example</button>
+      <button class="category-button" data-category="all">Example</button>
+      <button class="category-button" data-category="all">Example</button>
+      <button class="category-button new-category" data-category="new-category">+</button>
+      <!-- Custom buttons will be dynamically added here -->
+    </div>
+    <h3 class="category-header">Default Categories</h3>
+    <div class="category-group fixed-categories">
+      <button class="category-button" data-category="all">All</button>
+      <button class="category-button" data-category="gen1">Generation 1</button>
+      <button class="category-button" data-category="gen2">Generation 2</button>
+      <button class="category-button" data-category="gen3">Generation 3</button>
+      <button class="category-button" data-category="gen4">Generation 4</button>
+      <button class="category-button" data-category="gen5">Generation 5</button>
+      <button class="category-button" data-category="gen6">Generation 6</button>
+      <button class="category-button" data-category="gen7">Generation 7</button>
+      <button class="category-button" data-category="gen8">Generation 8</button>
+      <button class="category-button" data-category="gen9">Generation 9</button>
+      <button class="category-button" data-category="starters">Starters</button>
+      <button class="category-button" data-category="starters">Legendaries</button>
+    </div>
+  </div>
+</div>
+
 {% if can_edit %}
 
 <div class="content-container">
@@ -60,40 +119,6 @@
 
 {% else %}
 
-<div class="content-box">
-  <div class="content-header">{{ user.username }}'s Apriball Collection</div>
-
-  <div class="content-body">
-    <div class="collection-stats">
-      <div class="stat-block" title="Total unique ball-Pokémon combinations collected">
-        <img src="{{ url_for('static', filename='sprites/balls/moon.png') }}" alt="Unique" class="stat-icon">
-        <div class="stat-text-group">
-          <div class="stat-value">{{ unique_combinations }}</div>
-          <div class="stat-label">Unique Combinations</div>
-        </div>
-      </div>
-      <div class="stat-block" title="Total number of Pokémon entries marked complete">
-        <img src="{{ url_for('static', filename='sprites/pokemon/52.png') }}" alt="Completed" class="stat-icon" id="stat-pokemon-icon">
-        <div class="stat-text-group">
-          <div class="stat-value">{{ completed_pokemon }}</div>
-          <div class="stat-label">Completed Pokemon</div>
-        </div>
-      </div>
-      <div class="stat-block" title="Overall progress across all possible combinations">
-        <img src="{{ url_for('static', filename='sprites/balls/moon.png') }}" alt="Percentage" class="stat-icon">
-        <div class="stat-text-group">
-          <div class="stat-value">{{ total_progress }}%</div>
-          <div class="stat-label">Total Progress</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="content-box">
-  <div class="content-header">Test</div>
-</div>
 <table border="1" cellpadding="5" cellspacing="0" class="page-context-box">
   <thead>
     <tr>
