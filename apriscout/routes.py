@@ -9,7 +9,7 @@ from apriscout.services import update_user_collection
 from apriscout.utils import is_valid_username
 
 from . import db
-from .models import Pokemon, User, UserPokemon
+from .models import CustomCategory, Pokemon, User, UserPokemon
 
 main = Blueprint("main", __name__)
 
@@ -111,6 +111,9 @@ def apritable(username):
     ]
 
     user_collection = UserPokemon.query.filter_by(user_id=user.id).join(Pokemon).all()
+    user_categories = [
+        cat.name for cat in CustomCategory.query.filter_by(user_id=user.id).all()
+    ]
     unique_combinations = sum(
         sum(1 for ball in apriball_names if getattr(entry, ball))
         for entry in user_collection
@@ -127,6 +130,7 @@ def apritable(username):
         can_edit=can_edit,
         all_pokemon=all_pokemon,
         collection=user_collection,
+        user_categories=user_categories,
         unique_combinations=unique_combinations,
         completed_pokemon=completed_pokemon,
         total_progress=total_progress,
