@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -29,6 +30,8 @@ def create_app(test_config=None):
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = "login"
+
+    _ = Migrate(app, db)
 
     from .routes import main
 
