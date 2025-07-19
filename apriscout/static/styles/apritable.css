@@ -159,6 +159,18 @@ background-color: #eee;
   justify-content: center;
 }
 
+.custom-categories .category-button.selected {
+  background-color: var(--accent2); /* or any highlight color */
+  color: var(--light);
+  /* box-shadow: 0 0 8px var(--accent); */
+}
+
+.fixed-categories .category-button.selected {
+  background-color: var(--accent1); /* or any highlight color */
+  color: var(--light);
+}
+
+
 
 .custom-categories .category-button {
   background-color: var(--lightaccent2);
