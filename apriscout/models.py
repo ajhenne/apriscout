@@ -59,12 +59,11 @@ class Pokemon(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), unique=True, nullable=False)
-    dex_num = db.Column(db.Integer)
-    form_id = db.Column(db.String(10))
-    is_female = db.Column(db.Boolean)
     generation = db.Column(db.Integer)
-    type1 = db.Column(db.String(10))
-    type2 = db.Column(db.String(10))
+    evolves_from = db.Column(db.Integer)
+    evolution_chain_id = db.Column(db.Integer)
+    female_difference = db.Column(db.Integer)
+    is_starter = db.Column(db.Boolean)
     sprite = db.Column(db.String(255))
 
 
@@ -88,3 +87,33 @@ class UserPokemon(db.Model):
 
     user = db.relationship("User", back_populates="collections")
     pokemon = db.relationship("Pokemon")
+
+
+custom_category_pokemon = db.Table(
+    "custom_category_pokemon",
+    db.Column(
+        "category_id",
+        db.Integer,
+        db.ForeignKey("custom_category.id"),
+        primary_key=True,
+    ),
+    db.Column(
+        "user_pokemon_id",
+        db.Integer,
+        db.ForeignKey("user_pokemon.id"),
+        primary_key=True,
+    ),
+)
+
+
+class CustomCategory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+
+    user = db.relationship("User", backref="custom_categories")
+    pokemon_entries = db.relationship(
+        "UserPokemon",
+        secondary=custom_category_pokemon,
+        backref="custom_categories",
+    )
