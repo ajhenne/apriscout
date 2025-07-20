@@ -12,7 +12,7 @@
 {% block content %}
 
 <div class="content-box">
-  <div class="content-header">{{ user.username }}'s Apriball Collection</div>
+  <div class="content-header"><h2>{{ user.username }}'s Apriball Collection</h2></div>
 
   <div class="content-body">
     <div class="collection-stats">
@@ -42,7 +42,7 @@
 </div>
 
 <div class="content-box">
-  <div class="content-header">Collection Categories</div>
+  <div class="content-header"><h2>Collection Categories</h2></div>
   <div class="content-body">
     <!-- <h3 class="category-header">Custom Boxes</h3> -->
     <div class="category-group custom-categories">
@@ -50,7 +50,11 @@
       <button class="category-button" data-category="{{ category }}">{{ category }}</button>
       {% endfor %}
       {% if can_edit %}
-        <button>+</button>
+        <button id="add-category-button">+</button>
+        <div id="new-category-input-wrapper" style="display: none;">
+          <input type="text" id="new-category-input" placeholder="New category name">
+          <button id="confirm-new-category">✔</button>
+        </div>
       {% endif %}
       <!-- Custom buttons will be dynamically added here -->
     </div>
@@ -72,7 +76,44 @@
   </div>
 </div>
 
+<div class="content-box div-table">
+  <div class="content-header div-table-header">
+    <div class="div-header-cell">Pokemon</div>
+    {% for ball in ball_list %}
+      <div class="div-header-ball"><h3>{{ ball.capitalize() }}</h3></div>
+    {% endfor %}
+  </div>
+
+  <div class="content-body div-table-body">
+    {% for entry in collection %}
+    {% set cats = [] %}
+    {% if entry.pokemon.generation is not none %}{% set _ = cats.append('gen' ~ entry.pokemon.generation|string) %}{% endif %}
+    {% if entry.pokemon.is_starter %}{% set _ = cats.append('starters') %}{% endif %}
+    {% for cat in entry.custom_categories %}
+    {% set _ = cats.append(cat.name) %}
+    {% endfor %}
+      <div class="div-table-row" data-categories="{{ cats | join(',') }}">
+        <div class="div-table-cell">
+          <img src="{{ url_for('static', filename=entry.pokemon.sprite) }}" alt="{{ entry.pokemon.name }}" class="div-table-pokemon">
+          <div class="pokemon-info">
+            <h3>{{ entry.pokemon.name.capitalize() }}</h3>
+            <p>#{{ "%04d" | format(entry.pokemon.id) }}</p>
+          </div>
+        </div>
+        {% for ball in ball_list %}
+          <div class="div-table-cell"><img src="/static/sprites/balls/{{ ball }}.png" alt="{{ ball }}" class="{% if attribute(entry, ball) %}{% else %}uncollected{% endif %} div-table-ball"></div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+
 {% if can_edit %}
+
 
 <div class="content-container">
   <form method="post" action="{{ url_for('apri.apritable', username=user.username) }}">
@@ -108,8 +149,8 @@
     <button type="submit">Save Collection</button>
   </form>
 
-  <div id="pokemon-data" data-pokemon='{{ all_pokemon | tojson | safe }}'></div>
-  <form method="post" action="{{ url_for('apri.add_pokemon', username=user.username) }}">
+  <div id="pokemon-data" class="data" data-pokemon='{{ all_pokemon | tojson | safe }}'></div>
+  <form id="add-pokemon-form" method="post" action="{{ url_for('apri.add_pokemon', username=user.username) }}">
     <label for="pokemon_search">Add Pokémon:</label>
     <input type="text" id="pokemon_search" name="pokemon_name" placeholder="Search Pokémon..." autocomplete="off" required>
     <input type="hidden" name="pokemon_id" id="pokemon_id">
@@ -118,39 +159,11 @@
   </form>
 </div>
 
+<div id="flash-container" class="flash-container"></div>
 
 {% else %}
 
-<table border="1" cellpadding="5" cellspacing="0" class="page-context-box">
-  <thead>
-    <tr>
-      <th>Sprite</th>
-      <th>Name</th>
-      {% for ball in ball_list %}
-        <th>{{ ball.capitalize() }} Ball</th>
-      {% endfor %}
-    </tr>
-  </thead>
-  <tbody>
-    {% for entry in collection %}
-      {% set cats = [] %}
-      {% if entry.pokemon.generation is not none %}{% set _ = cats.append('gen' ~ entry.pokemon.generation|string) %}{% endif %}
-      {% if entry.pokemon.is_starter %}{% set _ = cats.append('starters') %}{% endif %}
-      {% for cat in entry.custom_categories %}
-        {% set _ = cats.append(cat.name) %}
-      {% endfor %}
-      <tr data-categories="{{ cats | join(',') }}">
-      <td><img src="{{ url_for('static', filename=entry.pokemon.sprite) }}" alt="{{ entry.pokemon.name }}" width="40"></td>
-      <td>{{ entry.pokemon.name }}</td>
-        {% for ball in ball_list %}
-          <td>
-            <img src="/static/sprites/balls/{{ ball }}.png" alt="{{ ball }}" class="{% if attribute(entry, ball) %}{% else %}uncollected{% endif %}">
-          </td>
-        {% endfor %}
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<p>NO EDIT</p>>
 {% endif %}
 
 {% endblock %}

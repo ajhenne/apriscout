@@ -7,7 +7,7 @@
   {% block head %}{% endblock %}
 </head>
 
-<body>
+<body{% if current_user.is_authenticated %} data-username="{{ current_user.username }}"{% endif %}>
   <nav class="navbar">
     <div class="nav-left">
       <a href="{{ url_for('main.home') }}" class="nav-logo-link">
