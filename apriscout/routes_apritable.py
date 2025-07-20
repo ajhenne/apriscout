@@ -7,10 +7,10 @@ from apriscout.constants import apriball_names
 from apriscout.models import CustomCategory, Pokemon, User, UserPokemon
 from apriscout.services import update_user_collection
 
-bp = Blueprint("apri", __name__)
+main = Blueprint("apri", __name__)
 
 
-@bp.route("/<username>", methods=["GET", "POST"])
+@main.route("/<username>", methods=["GET", "POST"])
 def apritable(username):
     """Render the profile page for a given username."""
     user = User.query.filter(func.lower(User.username) == username.lower()).first()
@@ -64,7 +64,7 @@ def apritable(username):
     )
 
 
-@bp.route("/<username>/add_pokemon", methods=["POST"])
+@main.route("/<username>/add_pokemon", methods=["POST"])
 @login_required
 def add_pokemon(username):
     """Add a Pokemon to the user's Apritable."""
