@@ -4,6 +4,9 @@
 
 {% block head %}
   <link rel="stylesheet" href="{{ url_for('static', filename='styles/apritable.css') }}">
+
+  <script id="pokemon-data" type="application/json">{{ all_pokemon | tojson }}</script>
+
   <script src="{{ url_for('static', filename='scripts/apritable_suggestions.js') }}" defer></script>
   <script src="{{ url_for('static', filename='scripts/apritable_display.js') }}" defer></script>
 {% endblock %}
@@ -77,11 +80,10 @@
 </div>
 
 <div class="content-box div-table">
+
   <div class="content-header div-table-header">
     <div class="div-header-cell">Pokemon</div>
-    {% for ball in ball_list %}
-      <div class="div-header-ball"><h3>{{ ball.capitalize() }}</h3></div>
-    {% endfor %}
+    <div class="div-header-cell" style="grid-column: span {{ ball_list|length }}">Apriballs</div>
   </div>
 
   <div class="content-body div-table-body">
@@ -105,65 +107,30 @@
         {% endfor %}
       </div>
     {% endfor %}
+
+    {% if can_edit %}
+    <div class="div-table-addrow">
+      <form action="{{ url_for('apri.add_pokemon', username=user.username) }}" method="POST" class="div-table-add-form">
+        <input type="text" id="pokemon-input" placeholder="Search Pokémon..." autocomplete="off">
+        <div id="suggestions" class="autocomplete-suggestions"></div>
+        <button type="submit" class="add-pokemon-button">+</button>
+      </form>
+      {% for ball in ball_list %}
+      <div class="div-add-cell"><img src="/static/sprites/balls/{{ ball }}.png" alt="{{ ball }}" class="uncollected div-table-ball"></div>
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
 </div>
-
-
 
 
 
 {% if can_edit %}
 
 
-<div class="content-container">
-  <form method="post" action="{{ url_for('apri.apritable', username=user.username) }}">
-    <table border="1" cellpadding="5" cellspacing="0">
-      <thead>
-        <tr>
-          <th>Sprite</th>
-          <th>Name</th>
-          {% for ball in ball_list %}
-            <th><img src="{{ url_for('static', filename='sprites/balls/{{ ball }}.png' )}}" alt=""></th>
-            <!-- <th>{{ ball.capitalize() }} Ball</th> -->
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for entry in collection %}
-            <td><img src="{{ url_for('static', filename=entry.pokemon.sprite) }}" alt="{{ entry.pokemon.name }}" width="40"></td>
-            <td>{{ entry.pokemon.name }}</td>
-            {% for ball in ball_list %}
-              <td>
-                <input
-                  type="checkbox"
-                  name="toggle_{{ entry.id }}_{{ ball }}"
-                  {% if attribute(entry, ball) %}checked{% endif %}
-                />
-              </td>
-            {% endfor %}
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    <button type="submit">Save Collection</button>
-  </form>
-
-  <div id="pokemon-data" class="data" data-pokemon='{{ all_pokemon | tojson | safe }}'></div>
-  <form id="add-pokemon-form" method="post" action="{{ url_for('apri.add_pokemon', username=user.username) }}">
-    <label for="pokemon_search">Add Pokémon:</label>
-    <input type="text" id="pokemon_search" name="pokemon_name" placeholder="Search Pokémon..." autocomplete="off" required>
-    <input type="hidden" name="pokemon_id" id="pokemon_id">
-    <ul id="suggestions" class="suggestions-list"></ul>
-    <button type="submit">Add</button>
-  </form>
-</div>
+{% endif %}
 
 <div id="flash-container" class="flash-container"></div>
 
-{% else %}
-
-<p>NO EDIT</p>>
-{% endif %}
 
 {% endblock %}
