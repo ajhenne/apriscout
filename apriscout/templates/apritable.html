@@ -91,6 +91,7 @@
     {% set cats = [] %}
     {% if entry.pokemon.generation is not none %}{% set _ = cats.append('gen' ~ entry.pokemon.generation|string) %}{% endif %}
     {% if entry.pokemon.is_starter %}{% set _ = cats.append('starters') %}{% endif %}
+    {% if entry.pokemon.is_legendary %}{% set _ = cats.append('legendary') %}{% endif %}
     {% for cat in entry.custom_categories %}
     {% set _ = cats.append(cat.name) %}
     {% endfor %}
