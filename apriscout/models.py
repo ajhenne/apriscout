@@ -48,12 +48,13 @@ class Pokemon(db.Model):
     Attributes:
         id (int): Internal unique ID for each Pokemon.
         name (str): Pokemon name.
-        dexNum (int): Pokedex number.
-        formId (str): Special forms, like female or gimicks.
-        isFemale (bool): If the Pokemon is (specifically) female.
         generation (int): The generation of introduction for the Pokemon.
-        type1 (string): Primary type of the Pokemon.
-        type2 (string): Secondary typing of the Pokemon, if applicable.
+        evolves_from
+        evolution_chain_id
+        female_difference
+        is_starter
+        is_legendary
+        # dexNum (int): Pokedex number.
         sprite (str): The relative link to the Pokemon's sprite.
     """
 
@@ -64,6 +65,7 @@ class Pokemon(db.Model):
     evolution_chain_id = db.Column(db.Integer)
     female_difference = db.Column(db.Integer)
     is_starter = db.Column(db.Boolean)
+    is_legendary = db.Column(db.Boolean)
     sprite = db.Column(db.String(255))
 
 

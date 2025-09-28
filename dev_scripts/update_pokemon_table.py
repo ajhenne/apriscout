@@ -31,6 +31,7 @@ with app.app_context():
         evolution_chain_id = row["evolution_chain_id"]
         female_difference = row["has_gender_differences"]
         is_starter = name.lower() in starter_names
+        is_legendary = row["is_legendary"]
         sprite = f"sprites/pokemon/{id}.png"
 
         if Pokemon.query.filter_by(name=name).first():
@@ -44,6 +45,7 @@ with app.app_context():
             evolution_chain_id=evolution_chain_id,
             female_difference=female_difference,
             is_starter=is_starter,
+            is_legendary=is_legendary,
             sprite=sprite,
         )
 
