@@ -2,6 +2,10 @@
     opacity: 0.2;
 }
 
+.unsaved {
+  box-shadow: 0px 0px 11px 4px var(--lightaccent2) !important;
+}
+
 
 .content-box {
   max-width: 1200px;
@@ -9,7 +13,7 @@
   width: 90%;
   min-width: 320px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); */
 }
 
 .content-header {
@@ -62,6 +66,45 @@
   padding: 0.5rem 1rem;
 }
 
+.apritable-menu-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0;
+}
+
+.apritable-menu {
+  color: var(--accent1);
+  background-color: var(--lightaccent1);
+  margin: 3px 0;
+  margin-right: 3px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+}
+
+.apritable-menu:hover {
+  background-color: var(--lightaccent2);
+  color: var(--darkbase);
+  cursor: pointer;
+}
+
+
+#apritable-menu-decor {
+  width: 50px;
+  margin: 3px 0;
+  border-top-right-radius: 15px;
+  border: 0;
+  padding: 0;
+}
+
+#apritable-menu-decor:hover {
+  cursor: default;
+  background-color: var(--lightaccent1);
+}
+
+
 .div-header-ball h3 {
   color: var(--lightaccent1)
 }
@@ -79,12 +122,12 @@
   height: 44px;
 }
 
-.div-table-header div:first-child {
+.div-table-header div.div-header-cell:first-child {
   background-color: var(--accent1);
   border-top-left-radius: 10px;
 }
 
-.div-table-header div:last-child {
+.div-table-header div.div-header-cell:last-child {
   background-color: var(--accent1);
   border-top-right-radius: 10px;
 }
@@ -365,7 +408,7 @@
 }
 
 .add-pokemon-button {
-  width: 50px;            /* match height of input */
+  width: 50px;
   height: auto;
   border: 0;
   background-color: var(--lightaccent1);
