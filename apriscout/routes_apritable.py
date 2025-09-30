@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import func
@@ -5,7 +7,6 @@ from sqlalchemy import func
 from apriscout import db
 from apriscout.constants import apriball_names
 from apriscout.models import CustomCategory, Pokemon, User, UserPokemon
-from apriscout.services import update_user_collection
 
 main = Blueprint("apri", __name__)
 
@@ -20,16 +21,6 @@ def apritable(username):
         return redirect(url_for("main.home"))
 
     can_edit = current_user.is_authenticated and current_user.id == user.id
-
-    if request.method == "POST" and can_edit:
-        updated = update_user_collection(user, request.form)
-
-        if updated:
-            db.session.commit()
-            flash("Collection updated successfully.")
-        else:
-            flash("No changes made.")
-        return redirect(url_for("apri.apritable", username=username))
 
     all_pokemon = [
         {"id": p.id, "name": p.name, "sprite": p.sprite}
@@ -62,6 +53,30 @@ def apritable(username):
         total_progress=total_progress,
         ball_list=apriball_names,
     )
+
+
+@main.route("/<username>/update_collection", methods=["POST"])
+@login_required
+def update_collection(username):
+    """Update the status of collected Apriballs."""
+
+    user = User.query.filter(func.lower(User.username) == username.lower()).first()
+    if not user or current_user.id != user.id:
+        return jsonify({"error": "Not authorised"}), 403
+
+    updates = request.get_json().get("updates", [])
+
+    for u in updates:
+        entry = UserPokemon.query.filter_by(
+            user_id=user.id,
+            pokemon_id=u["pokemon_id"],
+        ).first()
+        if entry:
+            setattr(entry, u["ball"], u["collected"])
+
+    db.session.commit()
+    flash("Collection saved successfully.", category="success")
+    return jsonify({"success": True})
 
 
 @main.route("/<username>/add_category", methods=["POST"])
@@ -119,6 +134,14 @@ def add_pokemon(username):
         flash("That Pokemon already exists in your collection.", category="warning")
     else:
         new_entry = UserPokemon(user_id=user.id, pokemon_id=pokemon_id)
+
+        balls = request.form.get("balls")
+        print(balls)
+        if balls:
+            balls = json.loads(balls)
+            for ball in balls:
+                setattr(new_entry, ball, True)
+
         db.session.add(new_entry)
         db.session.commit()
         flash(
@@ -126,4 +149,4 @@ def add_pokemon(username):
             category="success",
         )
 
-    return redirect(url_for("apri.apritable", username=username) + "#add-pokemon-form")
+    return redirect(url_for("apri.apritable", username=username))

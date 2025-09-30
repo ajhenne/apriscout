@@ -8,7 +8,8 @@
   <script id="pokemon-data" type="application/json">{{ all_pokemon | tojson }}</script>
 
   <script src="{{ url_for('static', filename='scripts/apritable_suggestions.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='scripts/apritable_display.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='scripts/apritable_category.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='scripts/apritable_balldata.js') }}" defer></script>
 {% endblock %}
 
 
@@ -49,6 +50,7 @@
   <div class="content-body">
     <!-- <h3 class="category-header">Custom Boxes</h3> -->
     <div class="category-group custom-categories">
+      <button class="category-button" data-category="all">All</button>
       {% for category in user_categories %}
       <button class="category-button" data-category="{{ category }}">{{ category }}</button>
       {% endfor %}
@@ -63,7 +65,6 @@
     </div>
     <h3 class="category-header">Default Categories</h3>
     <div class="category-group fixed-categories">
-      <button class="category-button" data-category="all">All</button>
       <button class="category-button" data-category="gen1">Generation 1</button>
       <button class="category-button" data-category="gen2">Generation 2</button>
       <button class="category-button" data-category="gen3">Generation 3</button>
@@ -84,11 +85,16 @@
   <div class="content-header div-table-header">
 
     <div class="div-header-cell">Pokemon</div>
+
+    {% if can_edit %}
     <div class="div-header-cell apritable-menu-container" style="grid-column: span {{ ball_list|length }}">
       <div id="" class="apritable-menu">Another Option</div>
       <div id="apritable-save" class="apritable-menu">Save Changes</div>
       <div id="apritable-menu-decor" class="apritable-menu"></div>
     </div>
+    {% else %}
+    <div class="div-header-cell apritable-menu-container" style="grid-column: span {{ ball_list|length }}"></div>
+    {% endif %}
 
   </div>
 
@@ -110,7 +116,14 @@
           </div>
         </div>
         {% for ball in ball_list %}
-          <div class="div-table-cell"><img src="/static/sprites/balls/{{ ball }}.png" alt="{{ ball }}" class="{% if attribute(entry, ball) %}{% else %}uncollected{% endif %} div-table-ball"></div>
+          <div class="div-table-cell">
+            <img
+              src="/static/sprites/balls/{{ ball }}.png"
+              alt="{{ ball }}"
+              class="{% if attribute(entry, ball) %}{% else %}uncollected{% endif %} div-table-ball"
+              data-pokemon-id="{{ entry.pokemon.id }}"
+              data-ball="{{ ball }}">
+          </div>
         {% endfor %}
       </div>
     {% endfor %}
@@ -127,7 +140,13 @@
         </form>
       </div>
       {% for ball in ball_list %}
-      <div class="div-add-cell"><img src="/static/sprites/balls/{{ ball }}.png" alt="{{ ball }}" class="uncollected div-table-ball"></div>
+      <div class="div-add-cell">
+        <img
+          src="/static/sprites/balls/{{ ball }}.png"
+          alt="{{ ball }}"
+          data-ball="{{ ball }}"
+          class="uncollected div-table-ball">
+      </div>
       {% endfor %}
     </div>
     {% endif %}
