@@ -82,8 +82,10 @@
 <div class="content-box div-table">
 
   <div class="content-header div-table-header">
+
     <div class="div-header-cell">Pokemon</div>
     <div class="div-header-cell" style="grid-column: span {{ ball_list|length }}">Apriballs</div>
+
   </div>
 
   <div class="content-body div-table-body">
@@ -111,16 +113,21 @@
 
     {% if can_edit %}
     <div class="div-table-addrow">
-      <form action="{{ url_for('apri.add_pokemon', username=user.username) }}" method="POST" class="div-table-add-form">
-        <input type="text" id="pokemon-input" placeholder="Search Pokémon..." autocomplete="off">
-        <div id="suggestions" class="autocomplete-suggestions"></div>
-        <button type="submit" class="add-pokemon-button">+</button>
-      </form>
+
+      <div class="add-aprimon-form-holder">
+        <form action="{{ url_for('apri.add_pokemon', username=user.username) }}" method="POST" class="add-aprimon-form">
+          <button type="submit" class="add-pokemon-button">+</button>
+          <input type="text" id="add-pokemon-search" placeholder="Enter Pokémon..." autocomplete="off">
+          <input type="hidden" id="pokemon_id" name="pokemon_id">
+          <ul id="add-pokemon-suggestions" class="autocomplete-suggestions"></ul>
+        </form>
+      </div>
       {% for ball in ball_list %}
       <div class="div-add-cell"><img src="/static/sprites/balls/{{ ball }}.png" alt="{{ ball }}" class="uncollected div-table-ball"></div>
       {% endfor %}
     </div>
     {% endif %}
+
   </div>
 </div>
 

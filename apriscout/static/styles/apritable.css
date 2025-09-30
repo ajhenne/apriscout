@@ -173,13 +173,9 @@
 .div-table-add-form button {
   background-color: var(--darkbase);
   color: var(--light);
-  padding: 0;
-  height: 30px;
-  width : 50px;
+  /* padding: 0; */
   border: 0;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); */
 }
 
 .div-add-cell {
@@ -320,4 +316,115 @@
 .category-button.new-category:hover {
   color: var(--darkbase);
   background-color: var(--accent2);
+}
+
+
+/* APRIMON ADD SECTION ############################################################## */
+
+.div-table-addrow > div {
+  padding-top: 3px;
+}
+
+.add-aprimon-form-holder {
+    display: flex;
+    height: 50px;
+    background-color: var(--accent1);
+    border-bottom-left-radius: 10px;
+}
+
+.add-aprimon-form {
+  display: flex;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  /* margin-left: 1px; */
+}
+
+.add-aprimon-form input {
+  flex: 1;
+  width: auto;
+  background-color: var(--accent1);
+  color: var(--darkbase);
+  border: 0;
+  margin-left: 3px;
+  border-left: 5px solid var(--lightaccent1);
+  padding-left: 10px;
+  z-index: 100;
+}
+
+.add-aprimon-form input::placeholder {
+  color: var(--lightaccent1);
+}
+
+.add-aprimon-form input:focus {
+  border: 0;
+  border-left: 5px solid var(--lightaccent2);
+  outline: none;
+}
+
+.add-pokemon-button {
+  width: 50px;            /* match height of input */
+  height: auto;
+  border: 0;
+  background-color: var(--lightaccent1);
+  color: var(--darkbase);
+  border-bottom-left-radius: 15px;
+  cursor: pointer;
+}
+
+.add-pokemon-button:hover {
+  background-color: var(--lightaccent2);
+}
+
+.div-table-ball {
+  width: 40px;
+  margin: 0 auto;
+  border-radius: 3px;
+  border: 1px solid var(--lightaccent1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* APRIMON ADD SUGGESTIONS ########################################################## */
+
+
+.autocomplete-suggestions {
+  position: absolute;
+  left: 53px;
+  bottom: 42px;
+  background: var(--accent1);
+  border-left: 5px solid var(--lightaccent2);
+  max-height: 320px;
+  overflow-y: auto;
+  margin-right: 50px;
+  width: calc(100% - 50px);
+  box-sizing: border-box;
+  border-top-right-radius: 15px;
+  z-index: 1000;
+  display: none;
+  padding: 0;
+}
+
+.autocomplete-suggestions.show {
+  display: block;
+}
+
+.autocomplete-suggestions li {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  color: var(--light);
+}
+
+.autocomplete-suggestions li img {
+  width: 30px;
+  height: 30px;
+  padding-right: 5px;
+}
+
+.autocomplete-suggestions li:hover,
+.autocomplete-suggestions li.active {
+  background: var(--lightaccent2);
 }
