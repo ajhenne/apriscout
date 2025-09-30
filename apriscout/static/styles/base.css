@@ -148,6 +148,40 @@ body {
   cursor: pointer;
 }
 
+/* FOOTER ELEMENTS ================================================================== */
+
+footer {
+  width: 100%;
+  height: auto;
+  background-color: var(--darkbase);
+  z-index: 100;
+  border-top: 3px solid var(--accent2);
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  color: var(--light);
+  flex-wrap: wrap;
+}
+
+.footer-container a {
+  color: var(--accent1);
+  margin: 0 0.5rem;
+  text-decoration: none;
+}
+
+.footer-container a:hover {
+  color: var(--accent2);
+  text-decoration: underline;
+}
+
+.footer-left, .footer-center, .footer-right {
+  margin: 0.5rem 0;
+}
+
 /* FLASHBAR ELEMENTS ================================================================ */
 
 .flash-container {
