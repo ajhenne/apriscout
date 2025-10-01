@@ -1,6 +1,9 @@
+const tableContainer = document.getElementById("aprimon-table-container");
+
 // clickable apriball data
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("div-table-ball")) {
+        tableContainer.classList.add("unsaved");
         e.target.classList.toggle("uncollected");
     }
 })
