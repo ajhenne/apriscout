@@ -1,7 +1,19 @@
-// Default category.
+const activeCategory = document.getElementById("active-category");
+
 document.addEventListener('DOMContentLoaded', () => {
-  const defaultButton = document.querySelector('.category-button[data-category="all"]');
-  if (defaultButton) defaultButton.click();
+  const initialCategory = activeCategory.value || "all";
+  const initialButton = document.querySelector(`.category-button[data-category="${initialCategory}"]`);
+  if (initialButton) {
+    initialButton.classList.add('selected');
+    document.querySelectorAll('.div-table-row').forEach(row => {
+      const categories = row.dataset.categories ? row.dataset.categories.split(',') : [];
+      if (initialCategory === 'all' || categories.includes(initialCategory)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
 });
 
 
@@ -10,6 +22,8 @@ document.querySelectorAll('.category-button').forEach(button => {
   button.addEventListener('click', () => {
 
     const category = button.dataset.category;
+    activeCategory.setAttribute('value', category);
+    window.location.href = `${window.location.pathname}?active_category=${category}`;
 
     document.querySelectorAll('.div-table-row').forEach(row => {
       const categories = row.dataset.categories ? row.dataset.categories.split(',') : [];

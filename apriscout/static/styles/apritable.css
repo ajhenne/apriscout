@@ -337,7 +337,6 @@
 
 .custom-categories .category-button:hover {
   background-color: var(--accent2);
-  color: var(--light)
 }
 
 .fixed-categories .category-button {

@@ -48,7 +48,6 @@
 <div class="content-box">
   <div class="content-header"><h2>Collection Categories</h2></div>
   <div class="content-body">
-    <!-- <h3 class="category-header">Custom Boxes</h3> -->
     <div class="category-group custom-categories">
       <button class="category-button" data-category="all">All</button>
       {% for category in user_categories %}
@@ -61,7 +60,6 @@
           <button id="confirm-new-category">✔</button>
         </div>
       {% endif %}
-      <!-- Custom buttons will be dynamically added here -->
     </div>
     <h3 class="category-header">Default Categories</h3>
     <div class="category-group fixed-categories">
@@ -132,10 +130,11 @@
     <div class="div-table-addrow">
 
       <div class="add-aprimon-form-holder">
-        <form action="{{ url_for('apri.add_pokemon', username=user.username) }}" method="POST" class="add-aprimon-form">
+        <form action="{{ url_for('apri.add_pokemon', username=user.username, ) }}" method="POST" class="add-aprimon-form">
           <button type="submit" class="add-pokemon-button">+</button>
           <input type="text" id="add-pokemon-search" placeholder="Enter Pokémon..." autocomplete="off">
           <input type="hidden" id="pokemon_id" name="pokemon_id">
+          <input type="hidden" name="active-category" id="active-category" value="{{ active_category or 'all' }}">
           <ul id="add-pokemon-suggestions" class="autocomplete-suggestions"></ul>
         </form>
       </div>

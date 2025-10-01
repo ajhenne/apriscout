@@ -5,7 +5,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import func
 
 from apriscout import db
-from apriscout.constants import apriball_names
+from apriscout.constants import apriball_names, default_categories
 from apriscout.models import CustomCategory, Pokemon, User, UserPokemon
 
 main = Blueprint("apri", __name__)
@@ -16,6 +16,7 @@ def apritable(username):
     """Render the profile page for a given username."""
     user = User.query.filter(func.lower(User.username) == username.lower()).first()
 
+    active_category = request.args.get("active_category", "all")
     if not user:
         flash("User not found.")
         return redirect(url_for("main.home"))
@@ -52,6 +53,7 @@ def apritable(username):
         completed_pokemon=completed_pokemon,
         total_progress=total_progress,
         ball_list=apriball_names,
+        active_category=active_category,
     )
 
 
@@ -130,17 +132,29 @@ def add_pokemon(username):
         pokemon_id=pokemon_id,
     ).first()
 
+    category_name = request.form.get("active-category")
+
     if already_exists:
         flash("That Pokemon already exists in your collection.", category="warning")
     else:
+        # create entry in aprimon database
         new_entry = UserPokemon(user_id=user.id, pokemon_id=pokemon_id)
 
         balls = request.form.get("balls")
-        print(balls)
         if balls:
             balls = json.loads(balls)
             for ball in balls:
                 setattr(new_entry, ball, True)
+
+        # create relation in categories
+        if category_name != "all" or category_name not in default_categories:
+            custom_category = CustomCategory.query.filter_by(
+                user_id=user.id,
+                name=category_name,
+            ).first()
+
+            if custom_category:
+                custom_category.pokemon_entries.append(new_entry)
 
         db.session.add(new_entry)
         db.session.commit()
@@ -149,4 +163,6 @@ def add_pokemon(username):
             category="success",
         )
 
-    return redirect(url_for("apri.apritable", username=username))
+    return redirect(
+        url_for("apri.apritable", username=username, active_category=category_name),
+    )
